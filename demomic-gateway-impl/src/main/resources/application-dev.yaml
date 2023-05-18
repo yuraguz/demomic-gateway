@@ -1,0 +1,15 @@
+server:
+  port: 8110
+spring:
+  config:
+    import: optional:configserver:http://localhost:9000
+  cloud:
+
+eureka:
+  client:
+    service-url:
+      defaultZone:
+        http://localhost:8070/eureka/
+
+demomic-gateway:
+  greetingMessage: "Some message"

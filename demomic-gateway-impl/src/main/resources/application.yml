@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: demomic-gateway
+  config:
+    import: optional:configserver:http://demomic-gateway:9000
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: demomic-gateway
+            client-secret: tOgXc6wX8glqwClAZTQqI3W9SmQjhJfY
+            scope: openid,roles
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:9999/realms/DemomicRealm
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone:
+        http://demomic-eureka:8070/eureka/
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "health,env,refresh,info,gateway"
