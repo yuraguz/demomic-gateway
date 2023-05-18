@@ -3,17 +3,15 @@ spring:
     name: demomic-gateway
   config:
     import: optional:configserver:http://demomic-gateway:9000
-  security:
-    oauth2:
-      client:
-        registration:
-          keycloak:
-            client-id: demomic-gateway
-            client-secret: tOgXc6wX8glqwClAZTQqI3W9SmQjhJfY
-            scope: openid,roles
-        provider:
-          keycloak:
-            issuer-uri: http://localhost:9999/realms/DemomicRealm
+  cloud:
+    gateway:
+      routes:
+        - id: test-route
+          uri: http://localhost:9000/test
+          predicates:
+            - Path=/testt/**
+          filters:
+            - MyRouteFilter=Secret message
 
 eureka:
   instance:
