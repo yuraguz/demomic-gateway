@@ -7,11 +7,29 @@ spring:
     gateway:
       routes:
         - id: test-route
-          uri: http://localhost:9000/test
+          uri: http://localhost:9000
           predicates:
-            - Path=/testt/**
+            - Path=/config/**
           filters:
-            - MyRouteFilter=Secret message
+            - RewritePath=/config/?(?<segment>.*), /$\{segment}
+      default-filters:
+        - SaveSession
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter:
+              replenishRate: 10
+              burstCapacity: 20
+              requestedTokens: 1
+  redis:
+    connect-timeout: 2s
+    host: localhost
+    port: 6379
+    timeout: 1s
+  session:
+    store-type: redis
+    timeout: 10m
+    redis:
+      namespace: demomic:gateway
 
 eureka:
   instance:

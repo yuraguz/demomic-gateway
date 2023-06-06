@@ -1,0 +1,6 @@
+services:
+  gateway-redis:
+    image: "redis:7.0"
+    container_name: "gateway-redis"
+    ports:
+      - 6379:6379
