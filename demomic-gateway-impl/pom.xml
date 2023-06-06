@@ -3,9 +3,9 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.demomic</groupId>
-        <artifactId>demomic-gateway-jar</artifactId>
+        <artifactId>demomic-gateway-pom</artifactId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../maven/demomic-gateway-jar/pom.xml</relativePath>
+        <relativePath>../demomic-gateway-pom/pom.xml</relativePath>
     </parent>
 
     <name>demomic-gateway-impl</name>
@@ -94,13 +94,62 @@
 
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>local-install</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>docker-install</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>dockerfile-maven-plugin</artifactId>
+                        <version>1.4.13</version>
+                        <configuration>
+                            <dockerfile>../Dockerfile</dockerfile>
+                            <contextDirectory>../</contextDirectory>
+                            <repository>demomic-product</repository>
+                            <tag>${project.version}</tag>
+                            <buildArgs>
+                                <JAR_FILE>demomic-product-impl/target/${project.build.finalName}.jar</JAR_FILE>
+                            </buildArgs>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>default</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                    <!-- <goal>push</goal>-->
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>com.spotify</groupId>
                 <artifactId>dockerfile-maven-plugin</artifactId>
                 <version>1.4.13</version>
@@ -119,11 +168,11 @@
                         <phase>install</phase>
                         <goals>
                             <goal>build</goal>
-                            <!-- <goal>push</goal>-->
+                            &lt;!&ndash; <goal>push</goal>&ndash;&gt;
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
